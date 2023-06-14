@@ -1,5 +1,7 @@
 package com.zor07;
 
+import com.zor07.model.Commands;
+
 import java.util.List;
 
 public class Validator {

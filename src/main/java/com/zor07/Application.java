@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Application {
 
 
-    public void start() {
+    public static void main(String[] args) {
 
         Validator validator = new Validator();
         Parser parser = new Parser(validator);

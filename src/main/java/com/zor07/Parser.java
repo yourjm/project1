@@ -2,6 +2,7 @@ package com.zor07;
 
 import com.zor07.model.Command;
 import com.zor07.model.CommandType;
+import com.zor07.model.Commands;
 
 import java.util.Arrays;
 import java.util.List;
