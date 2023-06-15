@@ -8,7 +8,9 @@ public class Validator {
 
     public void validate(List<String> args) {
 
-        validateCommand(args);
+        if (args ==null || args.isEmpty()) {
+            throwIllegalCommandException();
+        }
 
         switch (args.get(0)) {
             case Commands.GET -> validateGetCommand(args);
@@ -16,12 +18,6 @@ public class Validator {
             case Commands.UPDATE -> validateUpdateCommand(args);
             case Commands.DELETE -> validateDeleteCommand(args);
             default -> throwIllegalCommandException();
-        }
-    }
-
-    private void validateCommand(List<String> args) {
-        if (args ==null || args.isEmpty()) {
-            throwIllegalCommandException();
         }
     }
 
