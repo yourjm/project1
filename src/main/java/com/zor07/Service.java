@@ -2,7 +2,7 @@ package com.zor07;
 
 import com.zor07.model.Command;
 
-import java.util.Collection;
+import java.util.Map;
 
 public class Service {
 
@@ -18,11 +18,15 @@ public class Service {
 
         switch (command.getType()) {
             case GET -> get(command);
-            case GET_ALL -> getAll(command);
+            case GET_ALL -> getAll();
             case CREATE -> create(command);
             case UPDATE -> update(command);
             case DELETE -> delete(command);
         }
+    }
+
+    public Map<Integer, String> getMap() {
+        return storage.getMap();
     }
 
     private void get(Command command) {
@@ -30,9 +34,8 @@ public class Service {
         System.out.println(value);
     }
 
-    private void getAll(Command command) {
-        Collection<String> values = storage.getAll();
-        values.forEach(System.out::println);
+    private void getAll() {
+        getMap().forEach((key, value) -> System.out.println(String.format("%s: %s", key, value)));
     }
 
     private void create(Command command) {

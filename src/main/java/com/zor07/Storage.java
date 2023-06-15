@@ -16,12 +16,8 @@ public class Storage {
         Integer lastId = map.keySet()
                 .stream()
                 .max(Integer::compareTo)
-                .orElse(1);
+                .orElse(0);
         id = new AtomicInteger(lastId);
-    }
-
-    public Collection<String> getAll() {
-        return map.values();
     }
 
     public String get(Integer id) {
@@ -40,6 +36,10 @@ public class Storage {
 
     public void delete(Integer id) {
         map.remove(id);
+    }
+
+    public HashMap<Integer, String> getMap() {
+        return new HashMap<>(map);
     }
 
 }
