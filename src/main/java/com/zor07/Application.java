@@ -28,7 +28,6 @@ public class Application {
                     service.execute(command);
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     System.out.println(e.getMessage());
                 }
 
