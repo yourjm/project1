@@ -1,21 +1,31 @@
 package com.zor07;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zor07.model.Commands;
+import com.zor07.model.Person;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Validator {
 
-    public void validate(List<String> args) {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-        if (args ==null || args.isEmpty()) {
+    public void validate(String command) {
+        if (command == null|| command.isEmpty()) {
+            throwIllegalCommandException();
+        }
+
+        List<String> args = Arrays.asList(command.split(" "));
+        if (args.isEmpty()) {
             throwIllegalCommandException();
         }
 
         switch (args.get(0)) {
             case Commands.GET -> validateGetCommand(args);
-            case Commands.CREATE -> validateCreateCommand(args);
-            case Commands.UPDATE -> validateUpdateCommand(args);
+            case Commands.CREATE -> validateCreateCommand(command, args);
+            case Commands.UPDATE -> validateUpdateCommand(command, args);
             case Commands.DELETE -> validateDeleteCommand(args);
             default -> throwIllegalCommandException();
         }
@@ -35,16 +45,21 @@ public class Validator {
         }
     }
 
-    private void validateCreateCommand(List<String> args) {
+    private void validateCreateCommand(String command, List<String> args) {
         if (args.size() < 2) {
             throwIllegalCommandException();
         }
         if (!Commands.CREATE.equals(args.get(0))) {
             throwIllegalCommandException();
         }
+        try {
+            objectMapper.readValue(getPersonString(command), Person.class);
+        } catch (JsonProcessingException e) {
+            throwIllegalCommandException();
+        }
     }
 
-    private void validateUpdateCommand(List<String> args) {
+    private void validateUpdateCommand(String command, List<String> args) {
         if (args.size() < 3) {
             throwIllegalCommandException();
         }
@@ -52,6 +67,11 @@ public class Validator {
             throwIllegalCommandException();
         }
         if (isNotInt(args.get(1))) {
+            throwIllegalCommandException();
+        }
+        try {
+            objectMapper.readValue(getPersonString(command), Person.class);
+        } catch (JsonProcessingException e) {
             throwIllegalCommandException();
         }
     }
@@ -83,5 +103,7 @@ public class Validator {
         throw new IllegalArgumentException("Введена невалидная команда");
     }
 
-
+    private String getPersonString(String command) {
+        return command.substring(command.indexOf('{'));
+    }
 }

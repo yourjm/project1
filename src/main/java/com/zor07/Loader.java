@@ -1,5 +1,8 @@
 package com.zor07;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zor07.model.Person;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,14 +13,18 @@ import java.util.Properties;
 
 public class Loader {
 
-    private static final String FILE_NAME = "map.properties";
+    private static final String FILE_NAME = "person-map.properties";
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public void saveToFile(Map<Integer, String> map) {
+    public void saveToFile(Map<Integer, Person> map) {
         try (FileOutputStream fos = new FileOutputStream(getFileOrCreateIfNotExists())) {
             Properties properties = new Properties();
-            for (Map.Entry<Integer, String> entry : map.entrySet()) {
-                properties.put(entry.getKey().toString(), entry.getValue());
+            for (Map.Entry<Integer, Person> entry : map.entrySet()) {
+                properties.put(
+                        entry.getKey().toString(),
+                        objectMapper.writeValueAsString(entry.getValue())
+                );
             }
             properties.store(fos, null);
         } catch (Exception e) {
@@ -25,14 +32,16 @@ public class Loader {
         }
     }
 
-    public Map<Integer, String> loadFromFile() {
+    public Map<Integer, Person> loadFromFile() {
         try (FileInputStream fis = new FileInputStream(getFileOrCreateIfNotExists())) {
-            Map<Integer, String> map = new HashMap<>();
+            Map<Integer, Person> map = new HashMap<>();
             Properties properties = new Properties();
             properties.load(fis);
-
             for (String key : properties.stringPropertyNames()) {
-                map.put(Integer.parseInt(key), properties.get(key).toString());
+                map.put(
+                        Integer.parseInt(key),
+                        objectMapper.readValue(properties.get(key).toString(), Person.class)
+                );
             }
             return map;
         } catch (Exception e) {

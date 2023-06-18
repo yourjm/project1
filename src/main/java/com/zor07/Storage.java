@@ -1,5 +1,7 @@
 package com.zor07;
 
+import com.zor07.model.Person;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -7,10 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Storage {
 
 
-    private final HashMap<Integer, String> map;
+    private final HashMap<Integer, Person> map;
     private final AtomicInteger id;
 
-    public Storage(Map<Integer, String> map) {
+    public Storage(Map<Integer, Person> map) {
         this.map = new HashMap<>(map);
         Integer lastId = map.keySet()
                 .stream()
@@ -19,25 +21,25 @@ public class Storage {
         id = new AtomicInteger(lastId);
     }
 
-    public String get(Integer id) {
+    public Person get(Integer id) {
         return map.get(id);
     }
 
-    public Integer create(String value) {
+    public Integer create(Person person) {
         id.incrementAndGet();
-        map.put(id.get(), value);
+        map.put(id.get(), person);
         return id.get();
     }
 
-    public void update(Integer id, String newValue) {
-        map.replace(id, newValue);
+    public void update(Integer id, Person newPerson) {
+        map.replace(id, newPerson);
     }
 
     public void delete(Integer id) {
         map.remove(id);
     }
 
-    public HashMap<Integer, String> getMap() {
+    public HashMap<Integer, Person> getMap() {
         return new HashMap<>(map);
     }
 

@@ -2,9 +2,6 @@ package com.zor07;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,66 +9,67 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ValidatorTest {
 
     private final Validator validator = new Validator();
+    private static final String PERSON_JSON_STRING = "{\"name\": \"Bob\", \"age\": 19}";
 
 
     @Test
     void validateGetAllTest() {
-        List<String> args = List.of("GET");
-        assertDoesNotThrow(() -> validator.validate(args));
+        String command = "GET";
+        assertDoesNotThrow(() -> validator.validate(command));
     }
 
     @Test
     void validateGetByIdTest() {
-        List<String> args = List.of("GET", "123");
-        assertDoesNotThrow(() -> validator.validate(args));
+        String command = "GET 123";
+        assertDoesNotThrow(() -> validator.validate(command));
     }
 
     @Test
     void validateCreateTest() {
-        List<String> args = List.of("CREATE", "Some", "String", "for", "test");
-        assertDoesNotThrow(() -> validator.validate(args));
+        String command = "CREATE " + PERSON_JSON_STRING;
+        assertDoesNotThrow(() -> validator.validate(command));
     }
 
     @Test
     void validateUpdateTest() {
-        List<String> args = List.of("CREATE", "12", "Some", "String", "for", "test");
-        assertDoesNotThrow(() -> validator.validate(args));
+        String command = "UPDATE 12 " + PERSON_JSON_STRING;
+        assertDoesNotThrow(() -> validator.validate(command));
     }
 
     @Test
     void validateDeleteTest() {
-        List<String> args = List.of("DELETE", "12");
-        assertDoesNotThrow(() -> validator.validate(args));
+        String command = "DELETE 12";
+        assertDoesNotThrow(() -> validator.validate(command));
     }
 
     @Test
-    void shouldThrowExceptionWhenValidatingEmptyList() {
-        List<String> args = Collections.emptyList();
+    void shouldThrowExceptionWhenValidatingEmptyString() {
+        String command = "";
         Exception ex = assertThrows(
             IllegalArgumentException.class,
-            () -> validator.validate(args)
+            () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
     }
 
     @Test
-    void shouldThrowExceptionWhenValidatingNullList() {
-        List<String> args = Collections.emptyList();
+    void shouldThrowExceptionWhenValidatingNullString() {
+        String command = null;
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
     }
 
     @Test
-    void validateGetShouldThrowExceptionWhenListHas3Elements() {
-        List<String> args = List.of("GET", "12", "asd");
+    void validateGetShouldThrowExceptionWhenCREATEHas3Elements() {
+        String command = "GET 12 " + PERSON_JSON_STRING;
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -79,10 +77,10 @@ public class ValidatorTest {
 
     @Test
     void validateGetShouldThrowExceptionWhenFirstArgIsNotGET() {
-        List<String> args = List.of("12", "asd");
+        String command = "12 asd";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -90,10 +88,10 @@ public class ValidatorTest {
 
     @Test
     void validateGetShouldThrowExceptionWhenSecondArgIsNotInt() {
-        List<String> args = List.of("GET", "asd");
+        String command = "GET asd";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -101,10 +99,10 @@ public class ValidatorTest {
 
     @Test
     void validateCreateShouldThrowExceptionWhenListHas1Elements() {
-        List<String> args = List.of("CREATE");
+        String command = "CREATE";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -112,10 +110,10 @@ public class ValidatorTest {
 
     @Test
     void validateCreateShouldThrowExceptionWhenFirstAgrIsNotCREATE() {
-        List<String> args = List.of("asd", "123");
+        String command = "asd 123";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -123,10 +121,10 @@ public class ValidatorTest {
 
     @Test
     void validateUpdateShouldThrowExceptionWhenListHas2Elements() {
-        List<String> args = List.of("UPDATE", "123");
+        String command = "UPDATE 123";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -134,10 +132,10 @@ public class ValidatorTest {
 
     @Test
     void validateUpdateShouldThrowExceptionWhenFirstAgrIsNotUPDATE() {
-        List<String> args = List.of("asd", "123");
+        String command = "asd 123";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -145,10 +143,10 @@ public class ValidatorTest {
 
     @Test
     void validateUPDATEShouldThrowExceptionWhenSecondArgIsNotInt() {
-        List<String> args = List.of("UPDATE", "asd", "asd");
+        String command = "UPDATE asd " + PERSON_JSON_STRING;
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -156,10 +154,10 @@ public class ValidatorTest {
 
     @Test
     void validateDeleteShouldThrowExceptionWhenListHas1Elements() {
-        List<String> args = List.of("DELETE");
+        String command = "DELETE";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -167,10 +165,10 @@ public class ValidatorTest {
 
     @Test
     void validateDeleteShouldThrowExceptionWhenFirstAgrIsNotDELETE() {
-        List<String> args = List.of("asd", "123");
+        String command = "asd 123";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
@@ -178,10 +176,10 @@ public class ValidatorTest {
 
     @Test
     void validateDeleteShouldThrowExceptionWhenSecondArgIsNotInt() {
-        List<String> args = List.of("UPDATE", "asd", "asd");
+        String command = "DELETE asd";
         Exception ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> validator.validate(args)
+                () -> validator.validate(command)
         );
 
         assertEquals("Введена невалидная команда", ex.getMessage());
