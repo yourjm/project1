@@ -4,29 +4,29 @@ public class Command {
 
     private final CommandType type;
     private final Integer id;
-    private final String value;
+    private final Person person;
 
-    public Command(CommandType type, int id, String value) {
+    public Command(CommandType type, int id, Person person) {
         this.type = type;
         this.id = id;
-        this.value = value;
+        this.person = person;
     }
 
     public Command(CommandType type, int id) {
         this.type = type;
         this.id = id;
-        this.value = null;
+        this.person = null;
     }
 
-    public Command(CommandType type, String value) {
+    public Command(CommandType type, Person person) {
         this.type = type;
-        this.value = value;
+        this.person = person;
         this.id = null;
     }
 
     public Command(CommandType type) {
         this.type = type;
-        this.value = null;
+        this.person = null;
         this.id = null;
     }
 
@@ -38,8 +38,8 @@ public class Command {
         return id;
     }
 
-    public String getValue() {
-        return value;
+    public Person getPerson() {
+        return person;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Command {
         return "Command{" +
                 "type=" + type +
                 ", id=" + id +
-                ", value='" + value + '\'' +
+                ", value='" + person + '\'' +
                 '}';
     }
 }

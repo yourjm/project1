@@ -2,6 +2,7 @@ package com.zor07;
 
 import com.zor07.model.Command;
 import com.zor07.model.CommandType;
+import com.zor07.model.Person;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -12,11 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ServiceTest {
 
+    private static final Person PERSON_1 = new Person("Bob", 19);
+    private static final Person PERSON_2 = new Person("Alice", 21);
 
     @Test
     void shouldCreateNewValueWhenExecutingCreateCommand() {
         //given
-        Command command = new Command(CommandType.CREATE, "value");
+        Command command = new Command(CommandType.CREATE, PERSON_2);
         Storage storage = new Storage(new HashMap<>());
         Service service = new Service(storage);
 
@@ -24,31 +27,31 @@ public class ServiceTest {
         service.execute(command);
 
         //then
-        Map<Integer, String> result = storage.getMap();
+        Map<Integer, Person> result = storage.getMap();
         assertEquals(1, result.size());
-        assertEquals("value", result.get(1));
+        assertEquals(PERSON_2, result.get(1));
     }
 
     @Test
     void shouldUpdateValueWhenExecutingUpdateCommand() {
         //given
-        Storage storage = new Storage(Map.of(1, "value1"));
-        Command command = new Command(CommandType.UPDATE, 1, "new value");
+        Storage storage = new Storage(Map.of(1, PERSON_2));
+        Command command = new Command(CommandType.UPDATE, 1, PERSON_1);
         Service service = new Service(storage);
 
         //when
         service.execute(command);
 
         //then
-        Map<Integer, String> result = storage.getMap();
+        Map<Integer, Person> result = storage.getMap();
         assertEquals(1, result.size());
-        assertEquals("new value", result.get(1));
+        assertEquals(PERSON_1, result.get(1));
     }
 
     @Test
     void shouldDeleteValueWhenExecutingDeleteCommand() {
         //given
-        Storage storage = new Storage(Map.of(1, "value1"));
+        Storage storage = new Storage(Map.of(1, PERSON_1));
         Command command = new Command(CommandType.DELETE, 1);
         Service service = new Service(storage);
 
