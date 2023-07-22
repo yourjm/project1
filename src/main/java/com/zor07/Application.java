@@ -1,21 +1,18 @@
 package com.zor07;
 
+import com.zor07.dao.PersonDAO;
 import com.zor07.model.Command;
 
 import java.util.Scanner;
 
 public class Application {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/project_db";
-    private static final String USER = "user";
-    private static final String PASSWORD = "pass";
-
     public static void main(String[] args) {
 
         Validator validator = new Validator();
         Parser parser = new Parser(validator);
 
-        Storage storage = new Storage(DB_URL, USER, PASSWORD);
+        PersonDAO storage = new PersonDAO();
         Service service = new Service(storage);
 
 
