@@ -6,15 +6,16 @@ import java.util.Scanner;
 
 public class Application {
 
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/project_db";
+    private static final String USER = "user";
+    private static final String PASSWORD = "pass";
 
     public static void main(String[] args) {
-
-        Loader loader = new Loader();
 
         Validator validator = new Validator();
         Parser parser = new Parser(validator);
 
-        Storage storage = new Storage(loader.loadFromFile());
+        Storage storage = new Storage(DB_URL, USER, PASSWORD);
         Service service = new Service(storage);
 
 
@@ -23,7 +24,6 @@ public class Application {
                 try {
                     String line = scanner.nextLine();
                     if ("QUIT".equals(line)) {
-                        loader.saveToFile(service.getMap());
                         break;
                     }
                     Command command = parser.parse(line);

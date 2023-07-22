@@ -45,15 +45,19 @@ public class Service {
         System.out.println();
     }
     private void update(Command command) {
-        storage.update(command.getId(), command.getPerson());
-        System.out.printf("Person with id = %s updated", command.getId());
-        System.out.println();
+        boolean result = storage.update(command.getId(), command.getPerson());
+        String message = result
+                ? String.format("Person with id = %s updated", command.getId())
+                : String.format("Person with id = %s not found", command.getId());
+        System.out.println(message);
     }
 
     private void delete(Command command) {
-        storage.delete(command.getId());
-        System.out.printf("Person with id = %s deleted", command.getId());
-        System.out.println();
+        boolean result = storage.delete(command.getId());
+        String message = result
+                ? String.format("Person with id = %s deleted", command.getId())
+                : String.format("Person with id = %s not found", command.getId());
+        System.out.println(message);
     }
 
 }
