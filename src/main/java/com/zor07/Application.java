@@ -1,20 +1,18 @@
 package com.zor07;
 
+import com.zor07.dao.PersonDAO;
 import com.zor07.model.Command;
 
 import java.util.Scanner;
 
 public class Application {
 
-
     public static void main(String[] args) {
-
-        Loader loader = new Loader();
 
         Validator validator = new Validator();
         Parser parser = new Parser(validator);
 
-        Storage storage = new Storage(loader.loadFromFile());
+        PersonDAO storage = new PersonDAO();
         Service service = new Service(storage);
 
 
@@ -23,7 +21,6 @@ public class Application {
                 try {
                     String line = scanner.nextLine();
                     if ("QUIT".equals(line)) {
-                        loader.saveToFile(service.getMap());
                         break;
                     }
                     Command command = parser.parse(line);

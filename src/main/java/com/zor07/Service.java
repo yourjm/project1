@@ -1,5 +1,6 @@
 package com.zor07;
 
+import com.zor07.dao.PersonDAO;
 import com.zor07.model.Command;
 import com.zor07.model.Person;
 
@@ -7,11 +8,11 @@ import java.util.Map;
 
 public class Service {
 
-    private final Storage storage;
+    private final PersonDAO personDAO;
 
 
-    public Service(Storage storage) {
-        this.storage = storage;
+    public Service(PersonDAO personDAO) {
+        this.personDAO = personDAO;
     }
 
 
@@ -27,33 +28,37 @@ public class Service {
     }
 
     public Map<Integer, Person> getMap() {
-        return storage.getMap();
+        return personDAO.findAll();
     }
 
     private void get(Command command) {
-        Person person = storage.get(command.getId());
+        Person person = personDAO.get(command.getId());
         System.out.println(person);
     }
 
     private void getAll() {
-        getMap().forEach((key, value) -> System.out.println(String.format("%s: %s", key, value)));
+        getMap().forEach((key, value) -> System.out.printf("%s: %s%n", key, value));
     }
 
     private void create(Command command) {
-        Integer id = storage.create(command.getPerson());
+        Integer id = personDAO.create(command.getPerson());
         System.out.printf("Person saved with id = {%s}", id);
         System.out.println();
     }
     private void update(Command command) {
-        storage.update(command.getId(), command.getPerson());
-        System.out.printf("Person with id = %s updated", command.getId());
-        System.out.println();
+        boolean result = personDAO.update(command.getId(), command.getPerson());
+        String message = result
+                ? String.format("Person with id = %s updated", command.getId())
+                : String.format("Person with id = %s not found", command.getId());
+        System.out.println(message);
     }
 
     private void delete(Command command) {
-        storage.delete(command.getId());
-        System.out.printf("Person with id = %s deleted", command.getId());
-        System.out.println();
+        boolean result = personDAO.delete(command.getId());
+        String message = result
+                ? String.format("Person with id = %s deleted", command.getId())
+                : String.format("Person with id = %s not found", command.getId());
+        System.out.println(message);
     }
 
 }
